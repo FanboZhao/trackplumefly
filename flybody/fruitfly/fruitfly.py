@@ -138,7 +138,6 @@ class FruitFly(legacy_base.Walker):
         num_user_actions: int = 0,
         eye_camera_fovy: float = 150.,
         eye_camera_size: int = 32,
-        target_head_angle: float = 0.0,
     ):
         """Build a fruitfly walker.
 
@@ -170,7 +169,6 @@ class FruitFly(legacy_base.Walker):
             eye_camera_size: Size in pixels (height and width) of the eye cameras.
                 Height and width are assumed equal.
         """
-        self._target_head_angle = target_head_angle
         self._use_wings = use_wings
         self._adhesion_filter = adhesion_filter
         self._control_timestep = control_timestep
@@ -496,8 +494,7 @@ class FruitFly(legacy_base.Walker):
 
     def _build_observables(self):
         return FruitFlyObservables(self, self._buffer_size,
-                                   self._eye_camera_size,
-                                   self._target_head_angle)
+                                   self._eye_camera_size)
 
     @composer.cached_property
     def left_eye(self):
@@ -584,11 +581,10 @@ class FruitFly(legacy_base.Walker):
 class FruitFlyObservables(legacy_base.WalkerObservables):
     """Observables for the fruit fly."""
 
-    def __init__(self, walker, buffer_size, eye_camera_size, target_head_angle):
+    def __init__(self, walker, buffer_size, eye_camera_size):
         self._walker = walker
         self._buffer_size = buffer_size
         self._eye_camera_size = eye_camera_size
-        self._target_head_angle= target_head_angle
         super().__init__(walker)
 
     @composer.observable
@@ -754,11 +750,3 @@ class FruitFlyObservables(legacy_base.WalkerObservables):
                                      width=self._eye_camera_size,
                                      height=self._eye_camera_size,
                                      scene_option=self._scene_options)
-    
-    @composer.observable
-    def target_head_angle(self):
-        def get_angle():
-
-            return np.array(self._target_head_angle, dtype=np.float64)
-        
-        return observable.Generic(get_angle)

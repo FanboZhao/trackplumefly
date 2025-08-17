@@ -47,7 +47,6 @@ class FruitFlyTask(composer.Task, ABC):
         future_steps: int = 0,
         initialize_qvel: bool = False,
         observables_options: dict | None = None,
-        target_head_angle: float = 0.0
     ):
         """Construct a fruitfly task.
 
@@ -120,8 +119,7 @@ class FruitFlyTask(composer.Task, ABC):
                               control_timestep=control_timestep,
                               num_user_actions=num_user_actions,
                               eye_camera_fovy=eye_camera_fovy,
-                              eye_camera_size=eye_camera_size,
-                              target_head_angle = target_head_angle)
+                              eye_camera_size=eye_camera_size)
         # Set options to fly observables, if provided.
         self._walker.observables.set_options(observables_options)
 
